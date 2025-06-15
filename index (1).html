@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IoT-Based Robot Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #e3f2fd;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      color: #1a237e;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 270px;
+      background: linear-gradient(to bottom right, #3949ab, #7e57c2);
+      padding: 40px 25px;
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+      user-select: none;
+      box-shadow: 4px 0 12px rgba(55, 65, 140, 0.2);
+      transition: background 0.3s ease;
+    }
+    .sidebar img {
+      width: 60px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 2px solid #ede7f6;
+      transition: transform 0.3s ease;
+    }
+    .sidebar img:hover {
+      transform: scale(1.1);
+    }
+    .sidebar h1 {
+      font-size: 1.8em;
+      font-weight: 600;
+      margin-bottom: 40px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      letter-spacing: 1px;
+    }
+    .sidebar a {
+      text-decoration: none;
+      color: #e8eaf6;
+      font-weight: 400;
+      margin-bottom: 18px;
+      font-size: 1rem;
+      padding: 12px 15px;
+      border-radius: 8px;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        font-weight 0.3s ease,
+        box-shadow 0.3s ease;
+      cursor: pointer;
+      display: block;
+    }
+    .sidebar a.active,
+    .sidebar a:hover {
+      background-color: #ede7f6;
+      font-weight: 600;
+      color: #311b92;
+      box-shadow: 0 4px 10px rgba(48, 63, 159, 0.3);
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      background-color: #ffffff;
+      box-shadow: inset 0 1px 4px rgba(94, 53, 177, 0.15);
+      padding-bottom: 40px;
+    }
+
+    /* Hero section */
+    .hero {
+      position: relative;
+      height: 340px;
+      background-image: url('https://images.unsplash.com/photo-1581091012184-7f2310fc5a3c?auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin-bottom: 40px;
+      box-shadow: inset 0 0 0 2000px rgba(48, 63, 159, 0.5);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      color: #ede7f6;
+      padding: 0 20px;
+      max-width: 900px;
+    }
+    .hero h2 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 1.5px 1.5px 6px rgba(0,0,0,0.4);
+      line-height: 1.2;
+    }
+    .hero p {
+      font-style: italic;
+      font-size: 1.3rem;
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+    }
+
+    /* Sections */
+    .section {
+      padding: 40px 40px;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 40px auto;
+    }
+    .section h3 {
+      color: #3949ab;
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+      text-shadow: 0 1px 3px rgba(62, 81, 181, 0.3);
+      letter-spacing: 0.03em;
+    }
+    .section p {
+      font-size: 1.15rem;
+      line-height: 1.85;
+      color: #1a237e;
+      max-width: 820px;
+      margin: 0 auto;
+      font-weight: 400;
+    }
+    .section img {
+      margin-top: 25px;
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .section img:hover {
+      transform: scale(1.02);
+    }
+
+    /* FAQ */
+    .faq-item {
+      text-align: left;
+      max-width: 800px;
+      margin: 0 auto 35px auto;
+      border-radius: 10px;
+      padding: 18px 25px;
+      background: #f3f4fd;
+      box-shadow: 0 2px 8px rgba(62, 81, 181, 0.1);
+      transition: background-color 0.3s ease;
+      cursor: default;
+    }
+    .faq-item:hover {
+      background-color: #e0e2fb;
+    }
+    .faq-item h4 {
+      color: #1a237e;
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      user-select: none;
+    }
+    .faq-item p {
+      margin-left: 10px;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #3949ab;
+      font-weight: 400;
+      user-select: text;
+    }
+
+    /* Timeline container for progress */
+    .timeline {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto 60px auto;
+      padding-left: 30px;
+      border-left: 4px solid #7e57c2;
+    }
+    /* Timeline item */
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+      padding-left: 25px;
+      color: #303f9f;
+      background: #e8eaf6;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(126, 87, 194, 0.15);
+      padding: 20px 25px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -12px;
+      top: 22px;
+      width: 22px;
+      height: 22px;
+      background: #7e57c2;
+      border: 4px solid #ede7f6;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #7e57c2;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .timeline-item h4 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      user-select: none;
+    }
+    .timeline-item p {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #3949ab;
+      font-weight: 400;
+      user-select: text;
+      margin: 0;
+    }
+    .timeline-item:hover,
+    .timeline-item:focus {
+      background: #d1c4e9;
+      transform: translateX(6px);
+      box-shadow: 0 12px 28px rgba(126, 87, 194, 0.35);
+      outline: none;
+    }
+    .timeline-item:hover::before,
+    .timeline-item:focus::before {
+      background: #311b92;
+      box-shadow: 0 0 18px #311b92;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .timeline {
+        padding-left: 20px;
+        border-left-width: 3px;
+      }
+      .timeline-item {
+        padding-left: 20px;
+        margin-bottom: 30px;
+      }
+      .timeline-item::before {
+        left: -10px;
+        width: 18px;
+        height: 18px;
+        top: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar" role="navigation" aria-label="Primary">
+    <img src="https://i.postimg.cc/76ByxMS2/494820416-682609357721774-8007124701720224671-n.jpg" alt="Robot Logo" />
+    <h1>EDUFEEDBOT</h1>
+    <a class="active" href="#" onclick="showPage('home'); return false;" role="link" tabindex="0">Home</a>
+    <a href="#" onclick="showPage('progress'); return false;" role="link" tabindex="0">Progress</a>
+    <a href="#" onclick="showPage('faq'); return false;" role="link" tabindex="0">FAQ</a>
+  </div>
+
+  <main class="main" id="main-content" tabindex="0" role="main" aria-live="polite"></main>
+
+  <script>
+    const pages = {
+      home: `
+        <div class="hero" role="banner">
+          <div class="hero-content">
+            <h2>DEVELOPMENT OF IOT-BASED FOR REAL-TIME CUSTOMER FEEDBACK ROBOT</h2>
+            <p>with Sentiment Analysis Using Large Language Models</p>
+          </div>
+        </div>
+        <section class="section">
+          <h3>Project Overview</h3>
+          <p>
+            This project involves developing an IoT-based robot designed to capture real-time customer feedback, incorporating advanced sentiment analysis powered by large language models (LLMs). 
+            The system streamlines feedback collection through an intuitive touchscreen interface, allowing users to express their experience using emoji ratings and optional written comments.
+            Submitted feedback is securely processed via a Flask server and stored in a cloud database. Advanced LLM services analyze the sentiment behind the textual feedback, categorizing it as positive, neutral, or negative.
+            To enhance engagement, a reward dispensing mechanism controlled by an ESP32 microcontroller releases candy upon successful submission.
+            An interactive admin dashboard enables real-time monitoring of feedback trends and sentiment insights, empowering organizations to improve service responsiveness and decision-making.
+          </p>
+        </section>
+      `,
+
+      progress: `
+        <section aria-labelledby="progress-title" class="section">
+          <h3 id="progress-title" class="progress-title">Project Progress Timeline</h3>
+          <div class="timeline" role="list">
+            <article class="timeline-item" role="listitem" tabindex="0">
+              <h4>Week 1 (December 1st Week)</h4>
+              <p>Project inception: brainstorming ideas and selecting the customer feedback system with LLM sentiment analysis as our focus.</p>
+            </article>
+            <article class="timeline-item" role="listitem" tabindex="0">
+              <h4>Week 2</h4>
+              <p>Studied LLMs and GPT models, explored sentiment analysis techniques, and began drafting the project proposal.</p>
+            </article>
+            <article class="timeline-item" role="listitem" tabindex="0">
+              <h4>Week 3</h4>
+              <p>Submitted project proposal and revised methodology based on adviser feedback. Decided on using Flask, Python, and OpenAI API for implementation.</p>
+            </article>
+            <article class="timeline-item" role="listitem" tabindex="0">
+              <h4>Week 4</h4>
+              <p>Planned the full system architecture including touchscreen input, database storage, and automated LLM sentiment classification.</p>
+            </article>
+            <article class="timeline-item" role="listitem" tabindex="0">
+              <h4>Weeks 5-8 (January)</h4>
+              <p>Developed the front-end user interface for feedback entry. Set up MySQL cloud database and Flask back-end. Conducted mock tests validating system flow.</p>
+            </article>
+            <article class="timeline-item" role="listitem" tabindex="0">
+              <h4>Weeks 9-12 (February)</h4>
+              <p>Integrated OpenAI API for real-time sentiment analysis. Stored raw feedback and sentiment results in the database.</p>
+            </article>
+            <article class="timeline-item" role="listitem" tabindex="0">
+              <h4>Weeks 13-16 (March)</h4>
+              <p>Automated the entire feedback submission pipeline. Tested with real-world data, refined error handling, and validated model accuracy.</p>
+            </article>
+            <article class="timeline-item" role="listitem" tabindex="0">
+              <h4>Weeks 17-20 (April)</h4>
+              <p>Conducted beta testing with users, improved UI based on feedback, and added an admin dashboard for sentiment monitoring and reporting.</p>
+            </article>
+            <article class="timeline-item" role="listitem" tabindex="0">
+              <h4>Weeks 21-23 (May)</h4>
+              <p>Finalized system integration; validated sentiment analysis accuracy surpassing 90% compared to human classification.</p>
+            </article>
+            <article class="timeline-item" role="listitem" tabindex="0">
+              <h4>Week 24 (June 1st Week)</h4>
+              <p>Submitted final paper and presented defense. Proposed future system upgrades including multilingual support and departmental expansion.</p>
+            </article>
+          </div>
+        </section>
+      `,
+
+      faq: `
+        <section class="section" aria-labelledby="faq-title">
+          <h3 id="faq-title">Frequently Asked Questions</h3>
+          <div class="faq-item">
+            <h4>What is the purpose of this robot?</h4>
+            <p>
+              This robot is designed to collect real-time customer feedback efficiently and analyze the sentiment behind the feedback using advanced large language models. It aims to provide instant, actionable insights to improve services.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h4>What technologies are used in this project?</h4>
+            <p>
+              The system integrates ESP32 microcontrollers for hardware control, a cloud-based MySQL database for storing feedback, Flask for backend server management, and the OpenAI API to perform sophisticated sentiment analysis.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h4>Who can benefit from this robot?</h4>
+            <p>
+              Universities, businesses, and service centers looking to automate and enhance their feedback collection processes can greatly benefit from this robot, gaining faster and more accurate sentiment insights.
+            </p>
+          </div>
+          <div class="faq-item">
+            <h4>How is the data analyzed and utilized?</h4>
+            <p>
+              Collected feedback is automatically processed through LLM-based sentiment models hosted on a cloud backend, classifying sentiments as positive, neutral, or negative. These insights help organizations make informed decisions to improve customer satisfaction.
+            </p>
+          </div>
+        </section>
+      `
+    };
+
+    function showPage(page) {
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = pages[page];
+      document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+      document.querySelectorAll('.sidebar a').forEach(a => {
+        if (a.textContent.toLowerCase() === page) {
+          a.classList.add('active');
+        }
+      });
+      mainContent.focus();
+    }
+
+    // Initialize with Home page
+    showPage('home');
+  </script>
+
+</body>
+</html>
